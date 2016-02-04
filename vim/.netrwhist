@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/home/thaabit/aws'
+let g:netrw_dirhist_2='/var/www/jitsys/lib'
+let g:netrw_dirhist_3='/var/www/jitsys/lib/thaabit'
+let g:netrw_dirhist_4='/var/www/jitsys/lib/jitsys'

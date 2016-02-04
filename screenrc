@@ -1,0 +1,32 @@
+term "screen"
+termcapinfo xterm ti@:te@
+defscrollback 200000
+altscreen on
+bindkey "^[[27;5;9~" next # Ctrl-Tab
+bindkey "^[[27;6;9~" prev # Ctrl-Shift-Tab
+
+# initial windows
+screen -t test 2 bash
+screen -t data 3 bash
+screen -t logs 4 bash
+screen -t grep 5 bash
+screen -t rtorrent 6 bash
+screen -t code 1 bash
+
+# binds
+bind / eval "clear" "scrollback 0" "scrollback 200000"
+bind R eval "source $HOME/.screenrc" "echo '.screenrc reloaded!'"
+bind \040 windowlist -b
+bind \000 windowlist -b
+bind 0 resize =
+bind - resize -1
+bind + resize +1
+bind ^Q mapdefault
+bind q mapdefault
+bind ^S
+bind ^s
+bind ^1 window 1
+
+hardstatus             alwayslastline
+#hardstatus string '%{= mK}%-Lw%{= KW}%50>%n%f* %t%{= mK}%+Lw%< %{= kG}%-=%D %d %M %Y %c:%s%{-}'
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %d/%m %{W}%c %{g}]'

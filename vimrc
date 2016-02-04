@@ -1,0 +1,88 @@
+if has('unix')
+    set t_Co=256
+endif
+function! InsertTabWrapper(direction)
+    let col = col('.') - 1
+    if !col || getline('.')[col - 1] !~ '\k'
+        return "\<tab>"
+    elseif "backward" == a:direction
+        return "\<c-p>"
+    else
+        return "\<c-n>"
+    endif
+endfunction
+
+map <c-l> :set invnumber<CR>
+set updatecount=30
+inoremap <tab> <c-r>=InsertTabWrapper ("forward")<cr>
+inoremap <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
+autocmd FileType perl set makeprg=perl\ -wc\ %\ $*
+autocmd FileType perl set errorformat=%f:%l:%m
+autocmd FileType perl set autowrite
+filetype on
+au BufNewFile,BufRead *.tt set filetype=html
+vmap <tab> >gv
+vmap <s-tab> <gv
+nmap <tab> I<tab><esc>
+nmap <silent> <BS> :nohlsearch<CR>
+nmap <s-tab> ^i<bs><esc>
+set number
+set shiftwidth=4
+set expandtab
+set showmatch
+set softtabstop=4
+set autoindent
+set smartindent
+filetype plugin indent on
+set backspace=indent,eol,start
+set shiftround
+set nocompatible
+colorscheme moria
+syntax on
+syntax enable
+set backspace=2
+set ignorecase
+set incsearch
+set history=500
+set showbreak=\ \ \ \ \ \ \ \\
+set smartcase
+set smarttab
+set tabstop=4
+set whichwrap=b,s,h,l,<,>,[,]
+set hidden
+set viminfo='5,"100
+set path=/var/www/lib,/var/www/tt
+inoremap # X<C-H>#
+let perl_extended_vars = 1
+let perl_include_pod = 1
+nnoremap <c-P> :set invpaste paste?<CR>
+set pastetoggle=<c-P>
+set tw=0
+set complete-=i
+" Remove detault mappings
+let VCSCommandDisableMappings=1
+
+nmap ,ca :VCSAnn<CR>
+
+" Show 30 last lines from log related to the current file
+nmap ,cl :VCSLog<CR>
+
+" Show diffs with version in the CVS
+nmap ,cd :VCSDiff<CR>
+
+" Check-in the current version
+nmap ,ci :VCSCommit <CR>
+
+" Update current file
+nmap ,cu :VCSUpdate <CR>
+
+" Shows the status of the file
+nmap ,cs :VCSStatus<CR>
+
+" Remove diff colors
+map  ,cc :set nodiff<CR>
+
+map  ,wc :!PROV=roster perl -I/var/www/jitsys/lib -wc %<CR>
+
+map <space> <s-v>
+map <c-space> ?
