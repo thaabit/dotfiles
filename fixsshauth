@@ -1,0 +1,60 @@
+#!/usr/bin/perl
+
+# Program: fixsshauth
+# Authors: Rob Brown
+# Company: BlueHost.Com
+# Purpose:
+#   When resuming back to old ssh agent that is now gone,
+#   this allows to automatically repair the following spewage:
+#   "Error reading response length from authentication socket."
+# Usage: Run this script on the interim server.
+#   You can just hit CTRL-D to logout back the calling server
+#   and then run this script, or find an old screen session
+#   running with the same environment and run this there.
+
+use strict;
+use warnings;
+use File::Basename qw(dirname);
+use IO::Socket;
+
+my $agent = $ENV{SSH_AUTH_SOCK} or die "Missing SSH_AUTH_SOCK which is required for the agent\n";
+
+if (-e $agent) {
+    print "Testing agent ...\n";
+    if (new IO::Socket::UNIX $agent) {
+        print "Already connected: $agent\n";
+        exit;
+    }
+    if (my $horked = readlink $agent) {
+        print "$horked: KILLING Broken agent sock file ...\n";
+        unlink $horked;
+        rmdir dirname($horked);
+    }
+}
+
+unlink $agent;
+mkdir dirname($agent),0700;
+
+my @socks = grep { !-l $_ } (
+    glob ("/tmp/ssh-*/agent*"),
+    glob("/tmp/launch*/Listeners"),
+    glob("/tmp/keyring-*/ssh"),
+);
+
+if (!@socks) {
+    if (`grep no-agent-forwarding ~/.ssh/authorized_keys`) {
+        system q{perl -p -i -e 's/no-agent-forwarding //' ~/.ssh/authorized_keys};
+        die "Public key fixed! You have to logout and log back in for it to work though.\n";
+    }
+    die "Unable to locate any current agent for your user!\n";
+}
+
+if (@socks > 1) {
+    die "ERROR: Multiple logins detected! It is recommended to use ControlMaster in your ~/.ssh/config settings. Please logout at least one session and try again: @socks\n";
+}
+
+if (0 == system qw(ln -v -s -f), @socks, $agent) {
+    print "Reconnected to new agent: $socks[0]\n";
+    exit;
+}
+die "Unable to link to new agent socket.\n";
