@@ -10,6 +10,7 @@ files="bashrc vimrc vim screenrc"    # list of files/folders to symlink in homed
 
 dotdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
+bindir=~/bin             # user bin dir
 
 ##########
 
@@ -34,8 +35,14 @@ for file in $files; do
     fi
 done
 
-if [ ! -e /usr/bin/fixsshauth ]; then
-    echo "creating symlink to fixsshauth in /usr/bin."
-    error=`sudo ln -s $dotdir/fixsshauth /usr/bin/fixsshauth 2>&1`
+if [ ! -e $bindir ]; then
+    echo "creating $bindir"
+    error=`mkdir -p $bindir 2>&1`
+    if [ "$error" ]; then echo $error; fi
+fi
+
+if [ ! -e $bindir/fixsshauth ]; then
+    echo "creating symlink to fixsshauth in ~/bin."
+    error=`ln -s $dotdir/fixsshauth $bindir/fixsshauth 2>&1`
     if [ "$error" ]; then echo $error; fi
 fi
