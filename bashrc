@@ -13,6 +13,11 @@ else
 fi
 
 # User specific aliases and functions
+alias mv='mv -i'
+alias rm='rm -i'
+alias cp='cp -i'
+export EDITOR="vim"
+export VISUAL="vim"
 reset="\[$(tput sgr0)\]";
 bold="\[$(tput bold)\]";
 
@@ -49,3 +54,9 @@ function _git_desc {
 userprompt="${green}\u@\h"
 dirprompt="${whatever}\w"
 export PS1="${reset}${userprompt}${dirprompt}${orange}\$(_git_branch)${purple}\$(_git_desc)${reset} \$ "
+
+
+# server specific unmanaged definitions
+if [ -f ~/.bash_extra ]; then
+	. ~/.bash_extra
+fi
