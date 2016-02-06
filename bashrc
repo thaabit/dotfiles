@@ -21,6 +21,7 @@ export GREP_OPTIONS='-rI --exclude=*{swp,Entries} --color'
 export GREP_COLOR=32
 export EDITOR="vim"
 export VISUAL="vim"
+alias vi='vim'
 reset="\[$(tput sgr0)\]";
 bold="\[$(tput bold)\]";
 
