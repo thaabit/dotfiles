@@ -13,6 +13,7 @@ else
 fi
 
 # User specific aliases and functions
+alias sr='screen -d -R'
 alias mv='mv -i'
 alias rm='rm -i'
 alias cp='cp -i'
