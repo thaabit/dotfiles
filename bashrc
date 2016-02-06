@@ -14,9 +14,12 @@ fi
 
 # User specific aliases and functions
 alias sr='screen -d -R'
+alias hr='sudo /etc/init.d/httpd graceful'
 alias mv='mv -i'
 alias rm='rm -i'
 alias cp='cp -i'
+export GREP_OPTIONS='-rI --exclude=*{swp,Entries} --color'
+export GREP_COLOR=32
 export EDITOR="vim"
 export VISUAL="vim"
 reset="\[$(tput sgr0)\]";
