@@ -13,16 +13,26 @@ else
 fi
 
 # User specific aliases and functions
+alias ll='ls -alh'
+alias elog='tail -f /etc/httpd/logs/error_log'
 alias sr='screen -d -R'
 alias hr='sudo /etc/init.d/httpd graceful'
+alias mc='sudo /etc/init.d/memcached restart'
 alias mv='mv -i'
 alias rm='rm -i'
 alias cp='cp -i'
+alias clean='find . -name .#* | xargs rm -f && find . -name *.swp | xargs rm -f'
+alias vv="du --max-depth=1 -k | sort -nr | cut -f2 | xargs -d '\n' du -sh"
+alias gitlog="git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white). %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative"
+
 export GREP_OPTIONS='-rI --exclude=*{swp,Entries} --color'
 export GREP_COLOR=32
+
+export CVSEDITOR='vim'
 export EDITOR="vim"
 export VISUAL="vim"
 alias vi='vim'
+
 reset="\[$(tput sgr0)\]";
 bold="\[$(tput bold)\]";
 
