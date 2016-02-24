@@ -80,13 +80,13 @@ userprompt="${green}\u@\h"
 dirprompt="${blue}\w"
 spacer="${orange}>";
 
-if [[ $(hostname -s) =~ beta ]]; then
+if [[ $(hostname) =~ beta ]]; then
     bg="${yellowbg}BETA!!!";
-elif [[ $(hostname -s) =~ alpha ]]; then
-    bg="${bluebg}  ";
-elif [[ $(hostname -s) =~ roster|projects ]]; then
+elif [[ $(hostname) =~ alpha ]]; then
+    bg="${reset}";
+elif [[ $(hostname) =~ roster|projects ]]; then
     bg="${greenbg}ROSTER!!!";
-elif [[ $(hostname -s) =~ bluehost.com|gnhill.net|box984 ]]; then
+elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984 ]]; then
     bg="${redbg}LIVE!!!";
 else
     bg="${redbg}UNKNOWN!!!";
