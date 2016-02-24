@@ -86,6 +86,8 @@ elif [[ $(hostname) =~ alpha|dev ]]; then
     bg="${reset}";
 elif [[ $(hostname) =~ roster|projects ]]; then
     bg="${greenbg}ROSTER!!!";
+elif [[ $(hostname) =~ zugzug ]]; then
+    bg="${bluebg}ZUGZUG!!!";
 elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984 ]]; then
     bg="${redbg}LIVE!!!";
 else
