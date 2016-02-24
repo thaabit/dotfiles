@@ -76,29 +76,29 @@ greenbg="\[\033[48;5;76m\]\[\033[38;5;15m\]";
 yellowbg="\[\033[48;5;003m\]\[\033[38;5;226m\]";
 
 bg=$reset
-userprompt="${green}\u@\h"
 dirprompt="${blue}\w"
-spacer="${orange}>";
+spacer="${orange}>"
 
 if [[ $(hostname) =~ beta ]]; then
-    bg="${yellowbg}BETA!!!";
+    bg="${yellowbg}"
 elif [[ $(hostname) =~ alpha|dev ]]; then
-    bg="${reset}";
+    bg="${green}"
 elif [[ $(hostname) =~ roster|projects ]]; then
-    bg="${greenbg}ROSTER!!!";
+    bg="${greenbg}"
 elif [[ $(hostname) =~ zugzug ]]; then
-    bg="${bluebg}ZUGZUG!!!";
+    bg="${bluebg}"
 elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984 ]]; then
-    bg="${redbg}LIVE!!!";
+    bg="${redbg}"
 else
     bg="${redbg}UNKNOWN!!!";
 fi
+userprompt="${bg}\u@\h${reset}"
 
 if git --version &>/dev/null; then
-    export PS1="${bg}${reset}${userprompt}${dirprompt}${orange}\$(_git_branch)${purple}\$(_git_desc)${reset} \$ "
+    export PS1="${userprompt}${dirprompt}${orange}\$(_git_branch)${purple}\$(_git_desc)${reset} \$ "
 else 
     #export PS1="\[\e[1;37;41m\][\\u@\\h \\W]\[\e[m\]\\$ "
-    export PS1="${bg}${reset}${userprompt}${dirprompt}${reset} \$ "
+    export PS1="${userprompt}${dirprompt}${reset} \$ "
 fi
 export MYSQL_PS1="\\u@\\h:\\d> "
 #export MYSQL_PS1=$(echo -e "\x1B[1;37;43m\\u@\\h:\\d>\x1B[0m ")
