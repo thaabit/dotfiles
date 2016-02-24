@@ -43,6 +43,7 @@ syntax enable
 set backspace=2
 set ignorecase
 set incsearch
+set hlsearch
 set history=500
 set showbreak=\ \ \ \ \ \ \ \\
 set smartcase
