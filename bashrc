@@ -82,7 +82,7 @@ spacer="${orange}>";
 
 if [[ $(hostname) =~ beta ]]; then
     bg="${yellowbg}BETA!!!";
-elif [[ $(hostname) =~ alpha ]]; then
+elif [[ $(hostname) =~ alpha|dev ]]; then
     bg="${reset}";
 elif [[ $(hostname) =~ roster|projects ]]; then
     bg="${greenbg}ROSTER!!!";
