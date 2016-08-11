@@ -87,7 +87,7 @@ elif [[ $(hostname) =~ roster|projects ]]; then
     bg="${greenbg}"
 elif [[ $(hostname) =~ zugzug ]]; then
     bg="${bluebg}"
-elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984 ]]; then
+elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984|jarth.org ]]; then
     bg="${redbg}"
 else
     bg="${redbg}UNKNOWN!!!";
