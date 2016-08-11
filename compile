@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+use strict;
+use Getopt::Long qw(GetOptions);
+
+my $options = {};
+GetOptions($options, qw(abort verbose exclude=s@));
+
+my $RED    = "\e[1m\e[31m";
+my $GREEN  = "\e[1m\e[32m";
+my $BLUE   = "\e[1m\e[34m";
+my $YELLOW = "\e[1m\e[33m";
+my $CLEAR  = "\e(B\e[m";
+
+my @files = `find .`;
+my @fails;
+OUTER: foreach my $file (@files) {
+    chomp $file;
+    next if $file =~ /\.(git|swo|swp|html|txt|tt|rdf|xul|sql|ico|sh|js|inserts|css|conf|htaccess)/;
+    foreach my $exclude (@{ $options->{'exclude'} || [] }) {
+        if ($file =~ /$exclude/) {
+            print "$BLUE excluding $file\n" if $options->{'verbose'};
+            next OUTER;
+        }
+    }
+    next if -d $file;
+    my $info = `file $file`;
+    my ($path,$details) = split /:\s*/, $info;
+    if ($details =~ /perl/xim) {
+        my $result = `perl -wc $path 2>&1`;
+        if ($result =~ /syntax OK/) {
+            print "$GREEN$result" if $options->{'verbose'}; 
+        }
+        else {
+            print "$RED$result";
+            push @fails, $path;
+            exit if $options->{'abort'};
+        }
+    }
+    print $CLEAR;
+}
+
+print $BLUE;
+print "\n\n" . ('=') x 30 . "\n\n";
+if (@fails) {
+    print $RED;
+    print "The following files failed to compile: \n" . (join "\n", @fails);
+}
+else {
+    print $GREEN;
+    print "All modules compiled successfully";
+}
+print "\n\n";
+    
+
+exit;
