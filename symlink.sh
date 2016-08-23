@@ -52,3 +52,9 @@ for bin in $bins; do
     fi
 done
 
+mc=$dotdir/memcached
+mc_init='/etc/init.d/memcached'
+if ! sudo test -h $mc_init; then
+    error=`sudo ln -s $mc $mc_init 2>&1`
+    if [ "$error" ]; then echo $error; fi
+fi
