@@ -81,6 +81,8 @@ spacer="${orange}>"
 
 if [[ $(hostname) =~ beta ]]; then
     bg="${yellowbg}"
+elif [[ $(hostname) =~ macbook ]]; then
+    bg="${white}"
 elif [[ $(hostname) =~ alpha|dev ]]; then
     bg="${green}"
 elif [[ $(hostname) =~ roster|projects ]]; then
@@ -92,7 +94,7 @@ elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984 ]]; then
 else
     bg="${redbg}UNKNOWN!!!";
 fi
-userprompt="${bg}\u@\h${reset}"
+userprompt="${bg}\H${reset}"
 
 if git --version &>/dev/null; then
     export PS1="${userprompt}${dirprompt}${orange}\$(_git_branch)${purple}\$(_git_desc)${reset} \$ "
