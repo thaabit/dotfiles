@@ -1,7 +1,7 @@
 #! /bin/bash
 
 echo "--> Updating CentOS System"
-yum -y update
+sudo yum -y update
 
 echo "--> Installing YUM modules"
 sudo yum install -y \
@@ -29,6 +29,11 @@ perl-ExtUtils-Embed \
 mod_perl mod_perl-devel ncurses-devel \
 perl-YAML-Syck \
 perl-App-cpanminus \
+dovecot dovecot-mysql \
+telnet mutt mailx \
+openldap openldap-servers openldap-clients
+
+sudo yum --enablerepo=centosplus install -y postfix
 
 echo "--> Installing Perl modules with cpanm"
 sudo cpanm \
@@ -81,3 +86,12 @@ apache_conf='/etc/httpd/conf.d/jitsys.conf'
 if ! sudo test -h $apache_conf; then
     sudo ln -s ~/dotfiles/jitsys.conf $apache_conf 2>&1
 fi
+
+# postfix smtp
+sudo firewall-cmd --add-service=smtp --permanent
+sudo firewall-cmd --add-service=ldap --permanent
+ports="25 110 143 993 995 587"
+for port in $ports; do
+    sudo firewall-cmd --zone=public --add-port=$port/tcp --permanent
+done
+sudo firewall-cmd --reload
