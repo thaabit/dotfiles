@@ -23,6 +23,7 @@ alias ll='ls -alh'
 alias elog='tail -f /etc/httpd/logs/error_log'
 alias sr='screen -d -R'
 alias hr='sudo /etc/init.d/httpd graceful'
+alias htest="sudo /usr/sbin/apachectl configtest"
 alias mc='sudo /etc/init.d/memcached restart'
 alias mv='mv -i'
 alias rm='rm -i'
@@ -89,7 +90,7 @@ elif [[ $(hostname) =~ roster|projects ]]; then
     bg="${greenbg}"
 elif [[ $(hostname) =~ zugzug ]]; then
     bg="${bluebg}"
-elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984 ]]; then
+elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984|jarth.org ]]; then
     bg="${redbg}"
 else
     bg="${redbg}UNKNOWN!!!";
