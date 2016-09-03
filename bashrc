@@ -42,17 +42,17 @@ alias vi='vim'
 
 # git
 function _git_branch {
-    local gitbranch=`git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3,4`;
-    if [ $gitbranch ];
-        then printf " [%s]" $gitbranch;
+    local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+    if [ $branch ];
+        then printf " [%s]" $branch;
     fi
 }
 
 function _git_desc {
-    local gitbranch=`git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3,4`;
-    local description=`git config branch.$gitbranch.description`;
-    if [ $description ];
-        then printf " (%s)" $description;
+    local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+    local description="$(git config branch.$branch.description)";
+    if [[ ! -z $description ]]; then
+        echo " ($description)";
     fi
 }
 
