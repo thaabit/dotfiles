@@ -23,6 +23,7 @@ alias ll='ls -alh'
 alias elog='tail -f /etc/httpd/logs/error_log'
 alias sr='screen -d -R'
 alias hr='sudo /etc/init.d/httpd graceful'
+alias htest="sudo /usr/sbin/apachectl configtest"
 alias mc='sudo /etc/init.d/memcached restart'
 alias mv='mv -i'
 alias rm='rm -i'
@@ -72,7 +73,7 @@ white="\[\033[38;5;231m\]";
 
 bluebg="\[\033[48;5;21m\]\[\033[38;5;15m\]";
 redbg="\[\033[48;5;001m\]\[\033[38;5;15m\]";
-greenbg="\[\033[48;5;76m\]\[\033[38;5;15m\]";
+greenbg="\[\033[48;5;22m\]\[\033[38;5;46m\]";
 yellowbg="\[\033[48;5;003m\]\[\033[38;5;226m\]";
 
 bg=$reset
@@ -81,18 +82,20 @@ spacer="${orange}>"
 
 if [[ $(hostname) =~ beta ]]; then
     bg="${yellowbg}"
+elif [[ $(hostname) =~ macbook ]]; then
+    bg="${white}"
 elif [[ $(hostname) =~ alpha|dev ]]; then
     bg="${green}"
 elif [[ $(hostname) =~ roster|projects ]]; then
     bg="${greenbg}"
 elif [[ $(hostname) =~ zugzug ]]; then
     bg="${bluebg}"
-elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984 ]]; then
+elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984|jarth.org ]]; then
     bg="${redbg}"
 else
     bg="${redbg}UNKNOWN!!!";
 fi
-userprompt="${bg}\u@\h${reset}"
+userprompt="${bg}\H${reset}"
 
 if git --version &>/dev/null; then
     export PS1="${userprompt}${dirprompt}${orange}\$(_git_branch)${purple}\$(_git_desc)${reset} \$ "
