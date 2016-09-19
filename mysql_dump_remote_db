@@ -1,0 +1,78 @@
+#!/usr/bin/perl -w
+
+=head1 NAME
+
+mysql_dump_remote_db - copy tables from a remote db to local
+
+=head1 SYNOPSIS
+
+  dump_live_db [options] [tablename(s)]
+
+  Options:
+   -h, --help                   brief help message
+   --db|db_name=%s              remote database name
+   --local_db|local_db_name=%s  local database name (if different from remote)
+   --host|db_host=%s            remote host
+   --user|db_user=%s            remote database user
+   --password|pw=%s             remote password (may be set as environment var [db_name]_db_password)
+
+=cut
+
+use strict;
+use Getopt::Long;
+use Pod::Usage;
+use Debug;
+
+local $SIG{__DIE__} = sub {
+    require Carp;
+    Carp::confess(@_);
+};
+
+
+my ($database,$help,$host,$user,$pw);
+GetOptions(
+    "host|db_host=s" => \$host,
+    "db|db_name=s" => \$database,
+    "user|db_user=s" => \$user,
+    "p|pw|password=s" => \$pw,
+    "help"   => \$help,
+);
+pod2usage(1) if $help;
+my @tables = @ARGV or do {
+    print "Are you sure you want to copy the entire database? y/[n]: ";
+    my $resp = <>;
+    if ($resp !~ /y/xim) {
+        exit;
+    }
+};
+
+if (!$database) {
+    print "Remote db?";
+    $database = <>;
+    chomp $database;
+}
+
+if (!$host) {
+    print "Remote host?";
+    $host = <>;
+    chomp $host;
+}
+
+$user ||= $ENV{ $database . "_db_user" };
+if (!$user) {
+    print "Remote user?";
+    $user = <>;
+    chomp $user;
+}
+$pw ||= $ENV{ $database . "_db_password" };
+if (!$pw) {
+    print "Remote password?";
+    $pw = <>;
+    chomp $pw;
+}
+
+my $dump = "mysqldump --single-transaction -h$host -u$user -p$pw $database " . (join ' ', @tables);
+my $local = "sudo mysql $database";
+system qq{echo "create database if not exists $database" | sudo mysql};
+exec "$dump | $local";
+exit;

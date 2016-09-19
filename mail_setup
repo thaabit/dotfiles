@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+
+sudo yum --enablerepo=centosplus install postfix
+sudo yum install dovecot dovecot-mysql
+
+sudo systemctl enable mariadb.service
+sudo systemctl start mariadb.service
+
+read -p "Do you want to create a new mysql backend (y/[n])? " -n 1 -r
+echo 
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    sudo yum install mariadb-server dovecot-mysql
+    sudo systemctl enable mariadb.service
+    sudo systemctl start mariadb.service
+    read -p "Enter the mysql user" mysql_user
+    read -p "Enter the mysql password" mysql_pw
+    echo "CREATE DATABASE IF NOT EXISTS mail" | sudo mysql
+    echo "GRANT SELECT, INSERT, UPDATE, DELETE ON mail.* TO '$mysql_user'@'localhost' IDENTIFIED BY '$mysql_pw'";
+    echo "GRANT SELECT, INSERT, UPDATE, DELETE ON mail.* TO '$mysql_user'@'localhost.localdomain' IDENTIFIED BY '$mysql_pw'";
+    echo "FLUSH PRIVILEGES" | sudo mysql;
+    mysql_secure_installation
+fi

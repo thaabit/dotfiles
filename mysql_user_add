@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+
+read -p "Enter the mysql user: " mysql_user
+read -p "Enter the mysql password: " -s mysql_pw
+echo
+read -p "Enter the password again: " -s mysql_pw_chk
+echo
+if [ "$mysql_pw" != "$mysql_pw_chk" ]; then
+    echo "The passwords didn't match"
+    exit
+fi
+read -p "Enter the database name: " db_name
+
+echo "CREATE DATABASE IF NOT EXISTS $db_name" | sudo mysql
+echo "GRANT SELECT, INSERT, UPDATE, DELETE ON $db_name.* TO '$mysql_user'@'localhost' IDENTIFIED BY '$mysql_pw'" | sudo mysql;
+echo "GRANT SELECT, INSERT, UPDATE, DELETE ON $db_name.* TO '$mysql_user'@'localhost.localdomain' IDENTIFIED BY '$mysql_pw'" | sudo mysql;
+echo "FLUSH PRIVILEGES" | sudo mysql;
+
+echo "finished"
