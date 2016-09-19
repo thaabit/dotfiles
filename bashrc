@@ -32,7 +32,7 @@ alias clean='find . -name .#* | xargs rm -f && find . -name *.swp | xargs rm -f'
 alias vv="du --max-depth=1 -k | sort -nr | cut -f2 | xargs -d '\n' du -sh"
 alias gitlog="git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white). %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative"
 
-export GREP_OPTIONS='-rI --exclude=*{swp,Entries} --color'
+export GREP_OPTIONS='-rI --exclude=*{swp,Entries} --color --perl-regexp'
 export GREP_COLOR=32
 
 export CVSEDITOR='vim'
@@ -43,17 +43,17 @@ alias vi='vim'
 
 # git
 function _git_branch {
-    local gitbranch=`git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3,4`;
-    if [ $gitbranch ];
-        then printf " [%s]" $gitbranch;
+    local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+    if [ $branch ];
+        then printf " [%s]" $branch;
     fi
 }
 
 function _git_desc {
-    local gitbranch=`git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3,4`;
-    local description=`git config branch.$gitbranch.description`;
-    if [ $description ];
-        then printf " (%s)" $description;
+    local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+    local description="$(git config branch.$branch.description)";
+    if [[ ! -z $description ]]; then
+        echo " ($description)";
     fi
 }
 
