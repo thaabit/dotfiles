@@ -83,7 +83,7 @@ bg=$reset
 dirprompt="${blue}\w"
 spacer="${orange}>"
 
-host=$(hostname);
+host=$(hostname)
 if [[ $host =~ beta ]]; then
     bg="${yellowbg}"
 elif [[ $host =~ employee-macbook ]]; then
