@@ -106,4 +106,12 @@ fi
 export MYSQL_PS1="\\u@\\h:\\d> "
 #export MYSQL_PS1=$(echo -e "\x1B[1;37;43m\\u@\\h:\\d>\x1B[0m ")
 
+yel=$'\e[48;5;227m'
+end=$'\e[0m'
 
+pushd ~/dotfiles >/dev/null
+msg="${yel}Updating dotfiles${end}"
+echo "$msg"
+git pull --prune
+git status
+popd >/dev/null
