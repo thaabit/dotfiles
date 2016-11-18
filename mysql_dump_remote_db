@@ -47,26 +47,26 @@ my @tables = @ARGV or do {
 };
 
 if (!$database) {
-    print "Remote db?";
+    print "Enter remote db name: ";
     $database = <>;
     chomp $database;
 }
 
 if (!$host) {
-    print "Remote host?";
+    print "Enter remote host: ";
     $host = <>;
     chomp $host;
 }
 
 $user ||= $ENV{ $database . "_db_user" };
 if (!$user) {
-    print "Remote user?";
+    print "Enter remote user: ";
     $user = <>;
     chomp $user;
 }
 $pw ||= $ENV{ $database . "_db_password" };
 if (!$pw) {
-    print "Remote password?";
+    print "Enter remote password: ";
     $pw = <>;
     chomp $pw;
 }

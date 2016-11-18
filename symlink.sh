@@ -7,7 +7,7 @@
 ########## Variables
 
 files="bashrc vimrc vim screenrc gitignore"    # list of files/folders to symlink in homedir
-bins="fixsshauth compile"            # list of files to put in ~/bin
+bins="fixsshauth compile mysql_dump_remote_db mysql_user_add"            # list of files to put in ~/bin
 
 dotdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
