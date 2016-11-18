@@ -23,7 +23,6 @@ alias ll='ls -alh'
 alias elog='tail -f /etc/httpd/logs/error_log'
 alias sr='screen -d -R'
 alias hr='sudo /etc/init.d/httpd graceful'
-alias htest="sudo /usr/sbin/apachectl configtest"
 alias mc='sudo /etc/init.d/memcached restart'
 alias mv='mv -i'
 alias rm='rm -i'
@@ -42,10 +41,14 @@ alias vi='vim'
 
 
 # git
+function cur_branch () {
+    return $branch
+}
+
 function _git_branch {
     local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-    if [ $branch ];
-        then printf " [%s]" $branch;
+    if [ $branch ]; then 
+        printf " [%s]" $branch;
     fi
 }
 
@@ -80,22 +83,23 @@ bg=$reset
 dirprompt="${blue}\w"
 spacer="${orange}>"
 
-if [[ $(hostname) =~ beta ]]; then
+host=$(hostname)
+if [[ $host =~ beta ]]; then
     bg="${yellowbg}"
-elif [[ $(hostname) =~ macbook ]]; then
+elif [[ $host =~ employee-macbook ]]; then
     bg="${white}"
-elif [[ $(hostname) =~ alpha|dev ]]; then
+elif [[ $host =~ alpha|dev ]]; then
     bg="${green}"
-elif [[ $(hostname) =~ roster|projects ]]; then
+elif [[ $host =~ roster|projects ]]; then
     bg="${greenbg}"
-elif [[ $(hostname) =~ zugzug ]]; then
+elif [[ $host =~ zugzug ]]; then
     bg="${bluebg}"
-elif [[ $(hostname) =~ bluehost.com|gnhill.net|box984|jarth.org ]]; then
+elif [[ $host =~ bluehost.com|gnhill.net|box984|jarth.org ]]; then
     bg="${redbg}"
 else
     bg="${redbg}UNKNOWN!!!";
 fi
-userprompt="${bg}\H${reset}"
+userprompt="${bg}\u@\h${reset}"
 
 if git --version &>/dev/null; then
     export PS1="${userprompt}${dirprompt}${orange}\$(_git_branch)${purple}\$(_git_desc)${reset} \$ "
