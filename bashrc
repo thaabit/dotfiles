@@ -42,12 +42,12 @@ function hr {
     local cmd=''
     if [ -e "/bin/systemctl" ]
     then
-        cmd='sudo /bin/systemctl graceful  httpd.service'
+        cmd='sudo /bin/systemctl reload httpd.service; sudo systemctl status httpd.service'
     else
         cmd='sudo service httpd graceful'
     fi
     echo "$cmd"
-    $cmd
+    eval $cmd
 }
 
 # git
