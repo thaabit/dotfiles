@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 read -p "Enter the mysql user: " mysql_user
 read -p "Enter the mysql password: " -s mysql_pw

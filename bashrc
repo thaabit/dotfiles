@@ -5,7 +5,6 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-
 # server specific unmanaged definitions
 if [ -f ~/.bash_extra ]; then
 	. ~/.bash_extra
@@ -20,9 +19,8 @@ fi
 
 # User specific aliases and functions
 alias ll='ls -alh'
-alias elog='tail -f /etc/httpd/logs/error_log'
+alias elog='sudo tail -f /etc/httpd/logs/error_log'
 alias sr='screen -d -R'
-alias hr='sudo /etc/init.d/httpd graceful'
 alias mc='sudo /etc/init.d/memcached restart'
 alias mv='mv -i'
 alias rm='rm -i'
@@ -39,6 +37,18 @@ export EDITOR="vim"
 export VISUAL="vim"
 alias vi='vim'
 
+
+function hr {
+    local cmd=''
+    if [ -e "/bin/systemctl" ]
+    then
+        cmd='sudo /bin/systemctl graceful  httpd.service'
+    else
+        cmd='sudo service httpd graceful'
+    fi
+    echo "$cmd"
+    $cmd
+}
 
 # git
 function cur_branch () {
