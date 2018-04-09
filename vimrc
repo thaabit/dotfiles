@@ -88,3 +88,4 @@ map  ,wc :!PROV=roster perl -I/var/www/jitsys/lib -wc %<CR>
 
 map <space> <s-v>
 map <c-space> ?
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o

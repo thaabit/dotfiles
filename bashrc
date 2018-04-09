@@ -5,10 +5,6 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
-# server specific unmanaged definitions
-if [ -f ~/.bash_extra ]; then
-	. ~/.bash_extra
-fi
 if [ -n "$STY" ]; then
     export TERM='screen'
 elif [ -e /usr/share/terminfo/x/xterm-256color ]; then
@@ -120,4 +116,8 @@ fi
 export MYSQL_PS1="\\u@\\h:\\d> "
 #export MYSQL_PS1=$(echo -e "\x1B[1;37;43m\\u@\\h:\\d>\x1B[0m ")
 
+# server specific unmanaged definitions
+if [ -f ~/.bash_extra ]; then
+	. ~/.bash_extra
+fi
 
