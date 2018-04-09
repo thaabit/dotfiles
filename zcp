@@ -1,0 +1,34 @@
+#!/usr/bin/perl
+use strict;
+
+use Getopt::Long qw(GetOptions);
+
+my $RED    = "\e[1m\e[31m";
+my $GREEN  = "\e[1m\e[32m";
+my $BLUE   = "\e[1m\e[34m";
+my $YELLOW = "\e[1m\e[33m";
+my $CLEAR  = "\e(B\e[m";
+
+my $options = {};
+GetOptions($options, qw(dir=s from=s to=s verbose));
+my @errors;
+foreach my $required (qw(dir from to)) {
+    push @errors, "--$required is required" unless $options->{ $required };
+}
+my $titles = (join ' ', @ARGV) or do {
+    push @errors, 'need to pass a list of filenames';
+};
+if (@errors) {
+    print $RED;
+    print join "\n", @errors;
+    print "\n";
+    print $CLEAR;
+    exit(1);
+}
+
+my ($dir, $from, $dest) = @{ $options }{qw(dir from to)};
+my $cmd = qq{ssh $from 'tar -C $dir -cvzf - $titles' | ssh $dest 'tar -C $dir -xvzf -'};
+print "$cmd\n";
+system($cmd);
+
+exit;
