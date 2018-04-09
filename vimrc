@@ -44,6 +44,7 @@ set backspace=2
 set ignorecase
 set incsearch
 set hlsearch
+set nowrapscan
 set history=500
 set showbreak=\ \ \ \ \ \ \ \\
 set smartcase
