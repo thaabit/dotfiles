@@ -21,7 +21,6 @@ mysql_dump_remote_db - copy tables from a remote db to local
 use strict;
 use Getopt::Long;
 use Pod::Usage;
-use Debug;
 
 local $SIG{__DIE__} = sub {
     require Carp;

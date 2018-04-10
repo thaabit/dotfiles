@@ -63,7 +63,6 @@ set tw=0
 set complete-=i
 
 " taglist
-let Tlist_Auto_Open = 1
 nnoremap <silent> <F5> :TlistToggle<CR>
 
 " Remove detault mappings
