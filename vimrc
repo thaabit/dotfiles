@@ -61,6 +61,11 @@ nnoremap <c-P> :set invpaste paste?<CR>
 set pastetoggle=<c-P>
 set tw=0
 set complete-=i
+
+" taglist
+let Tlist_Auto_Open = 1
+nnoremap <silent> <F5> :TlistToggle<CR>
+
 " Remove detault mappings
 let VCSCommandDisableMappings=1
 
