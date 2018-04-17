@@ -1,0 +1,71 @@
+#!/usr/bin/perl
+use warnings;
+use strict;
+use Term::ANSIColor qw(:constants);
+
+my $RESET = RESET;
+my $COLOR_SUCCESS = GREEN.BOLD;
+my $COLOR_WARN    = YELLOW.BOLD;
+my $COLOR_INFORM  = WHITE.BOLD;
+
+my $logfile = "/tmp/install_ctags";
+if (&installed("ctags")) {
+    &inform("ctags already installed..");
+    &done("skipping");
+}
+else {
+    my $home = $ENV{'HOME'};
+    my $can_sudo = (`sudo -v 2>&1` !~ /may not run sudo/im);
+    if (&installed("brew")) {
+        &inform("installing ctags with brew\n");
+        `brew install ctags > $logfile 2>&3`;
+        &done;
+
+    } 
+    elsif ($can_sudo && &installed("yum")) {
+        &inform("installing ctags with yum...");
+        `sudo yum install -y ctags > $logfile 2>&1`;
+        &done;
+    }
+    else {
+        chdir $home or die $!;
+        &inform("installing ctags in $home/bin. check $logfile for errors\n");
+        
+        &inform("downloading from sourceforge...");
+        `curl -LO http://prdownloads.sourceforge.net/ctags/ctags-5.8.tar.gz > $logfile 2>&1`;
+        &done;
+
+        &inform("untarring source...");
+        print `tar xfz ctags-5.8.tar.gz`;
+        &done;
+
+        chdir "ctags-5.8" or die $!;
+        &inform("configuring source...");
+        `./configure --prefix=$home > $logfile 2>&1`;
+        &done;
+
+        &inform("installing...");
+        `make && make install`;
+        &done;
+
+        &inform("cleaning up...");
+        chdir '..';
+        print `rm -rf ctags-5.8*`;
+        &done;
+    }
+}
+
+
+sub inform { 
+    my $msg = shift;
+    print "${COLOR_INFORM}$msg${RESET}"
+}
+
+sub done {
+    my $msg = shift || "done";
+    print "${COLOR_SUCCESS}${msg}${RESET}\n"
+}
+sub installed {
+    my $bin = shift;
+    return `command -v "$bin"`;
+}
