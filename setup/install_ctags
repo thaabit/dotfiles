@@ -45,7 +45,7 @@ else {
         &done;
 
         &inform("installing...");
-        `make && make install`;
+        `make && make install > $logfile 2>&1`;
         &done;
 
         &inform("cleaning up...");
