@@ -14,13 +14,14 @@ else
 fi
 
 # User specific aliases and functions
-alias ll='ls -alh'
+alias ll='ls -lh'
 alias elog='sudo tail -f /etc/httpd/logs/error_log'
 alias sr='screen -d -R'
 alias mc='sudo /etc/init.d/memcached restart'
 alias mv='mv -i'
 alias rm='rm -i'
 alias cp='cp -i'
+alias s='source ~/.bashrc'
 alias clean='find . -name .#* | xargs rm -f && find . -name *.swp | xargs rm -f'
 alias vv="du --max-depth=1 -k | sort -nr | cut -f2 | xargs -d '\n' du -sh"
 alias gitlog="git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white). %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative"
@@ -92,7 +93,7 @@ spacer="${orange}>"
 host=$(hostname)
 if [[ $host =~ beta ]]; then
     bg="${yellowbg}"
-elif [[ $host =~ employee-macbook ]]; then
+elif [[ $host =~ pro-ghill ]]; then
     bg="${white}"
 elif [[ $host =~ alpha|dev ]]; then
     bg="${green}"
