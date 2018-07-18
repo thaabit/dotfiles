@@ -106,7 +106,9 @@ elif [[ $host =~ bluehost.com|gnhill.net|box984|jarth.org ]]; then
 else
     bg="${redbg}UNKNOWN!!!";
 fi
-userprompt="${bg}\u@\h${reset}"
+host=${host#main\.}
+host=${host%.bluehost.com}
+userprompt="${bg}\u@${host}${reset}"
 
 if git --version &>/dev/null; then
     export PS1="${userprompt}${dirprompt}${orange}\$(_git_branch)${purple}\$(_git_desc)${reset} \$ "
