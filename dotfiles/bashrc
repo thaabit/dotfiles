@@ -101,7 +101,7 @@ elif [[ $host =~ roster|projects ]]; then
     bg="${greenbg}"
 elif [[ $host =~ zugzug ]]; then
     bg="${bluebg}"
-elif [[ $host =~ bluehost.com|gnhill.net|box984|jarth.org ]]; then
+elif [[ $host =~ unifiedlayer.com|bluehost.com|gnhill.net|box984|jarth.org ]]; then
     bg="${redbg}"
 else
     bg="${redbg}UNKNOWN!!!";
