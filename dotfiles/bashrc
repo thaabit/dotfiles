@@ -108,6 +108,7 @@ else
 fi
 host=${host#main\.}
 host=${host%.bluehost.com}
+host=${host%.unifiedlayer.com}
 userprompt="${bg}[${host}]${reset}"
 
 if git --version &>/dev/null; then
