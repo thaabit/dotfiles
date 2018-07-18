@@ -8,13 +8,15 @@
     
 for fgbg in 48 ; do #Foreground/Background
     for color in {0..256} ; do #Colors
-        #Display the color
-        var=$(printf '%03d' "$color")
-        echo -en "\e[38;5;15m\e[48;5;${color}m ${var}\e[0m"
-        #Display 10 colors per lines
-        if [ $((($color + 1) % 10)) == 0 ] ; then
-            echo #New line
-        fi
+        for bg in {0..256} ; do #Colors
+            #Display the color
+            var=$(printf '%03d-%03d' "$color" "$bg")
+            echo -en "\e[38;5;${color}m\e[48;5;${bg}m ${var}\e[0m"
+            #Display 10 colors per lines
+            if [ $((($color + 1) % 50)) == 0 ] ; then
+                echo #New line
+            fi
+        done
     done
     echo #New line
 done

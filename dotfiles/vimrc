@@ -89,6 +89,7 @@ nmap ,cs :VCSStatus<CR>
 map  ,cc :set nodiff<CR>
 
 map  ,wc :!PROV=roster perl -I/var/www/jitsys/lib -wc %<CR>
+map  ,ws :%s/\s\+$//e
 
 map <space> <s-v>
 map <c-space> ?

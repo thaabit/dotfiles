@@ -108,7 +108,7 @@ else
 fi
 host=${host#main\.}
 host=${host%.bluehost.com}
-userprompt="${bg}\u@${host}${reset}"
+userprompt="${bg}[${host}]${reset}"
 
 if git --version &>/dev/null; then
     export PS1="${userprompt}${dirprompt}${orange}\$(_git_branch)${purple}\$(_git_desc)${reset} \$ "

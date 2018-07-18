@@ -1,3 +1,7 @@
 *.swp
 *.swo
 *.bak
+cover_db
+.ignore
+conf/*.bak
+conf/*.old
