@@ -1,0 +1,31 @@
+#!/bin/bash
+Red="\005{Wr}"
+Yellow="\005{Yy}"
+Green="\005{Gk}"
+Roster="\005{Gg}"
+Blue="\005{Bk}"
+Magenta="\005{Mk}"
+Cyan="\005{Ck}"
+White="\005{Wk}"
+
+shorthost=$(hostname)
+shorthost=${shorthost#main\.}
+shorthost=${shorthost%.bluehost.com}
+shorthost=${shorthost%.unifiedlayer.com}
+if [[ $HOSTNAME =~ beta|smoker ]]; then
+    echo -e "$Yellow[$shorthost]"
+elif [[ $HOSTNAME =~ pro-ghill ]]; then
+    echo -e "$White[$shorthost]"
+elif [[ $HOSTNAME =~ alpha|dev ]]; then
+    echo -e "$Green[$shorthost]"
+elif [[ $HOSTNAME =~ roster|projects ]]; then
+    echo -e "$Roster[$shorthost]"
+elif [[ $HOSTNAME =~ zugzug ]]; then
+    echo -e "$Blue[$shorthost]"
+elif [[ $HOSTNAME =~ 0.bluehost ]]; then
+    echo -e "$Red[$shorthost]"
+elif [[ $HOSTNAME =~ fastdomain.com|unifiedlayer.com|bluehost.com|gnhill.net|box984|jarth.org ]]; then
+    echo -e "$Red[$shorthost]"
+else
+    echo -e "$Red[$shorthost UNKNOWN!!!]"
+fi
