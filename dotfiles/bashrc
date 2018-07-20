@@ -70,28 +70,29 @@ function _git_desc {
 reset="\[$(tput sgr0)\]";
 bold="\[$(tput bold)\]";
 
-orange="\[\033[38;5;172m\]";
-blue="\[\033[38;5;75m\]";
-purple="\[\033[38;5;99m\]";
-pink="\[\033[38;5;213m\]";
-red="\[\033[38;5;196m\]";
-green="\[\033[38;5;76m\]";
-yellow="\[\033[38;5;227m\]";
-cyan="\[\033[38;5;87m\]";
-magenta="\[\033[38;5;171m\]";
-white="\[\033[38;5;231m\]";
+orange="\[\033[38;5;172m\]"
+blue="\[\033[38;5;75m\]"
+purple="\[\033[38;5;99m\]"
+pink="\[\033[38;5;213m\]"
+red="\[\033[38;5;196m\]"
+green="\[\033[38;5;76m\]"
+yellow="\[\033[38;5;227m\]"
+cyan="\[\033[38;5;87m\]"
+magenta="\[\033[38;5;171m\]"
+white="\[\033[38;5;231m\]"
 
-bluebg="\[\033[48;5;21m\]\[\033[38;5;15m\]";
-redbg="\[\033[48;5;001m\]\[\033[38;5;15m\]";
-greenbg="\[\033[48;5;22m\]\[\033[38;5;46m\]";
-yellowbg="\[\033[48;5;003m\]\[\033[38;5;226m\]";
+bluebg="\[\033[48;5;21m\]\[\033[38;5;15m\]"
+redbg="\[\033[48;5;001m\]\[\033[38;5;15m\]"
+greenbg="\[\033[48;5;22m\]\[\033[38;5;46m\]"
+yellowbg="\[\033[48;5;003m\]\[\033[38;5;226m\]"
+orangebg="\[\033[48;5;172m\]\[\033[38;5;226m\]"
 
 bg=$reset
 dirprompt="${blue}\w"
 spacer="${orange}>"
 
 host=$(hostname)
-if [[ $host =~ beta ]]; then
+if [[ $host =~ beta|smoker ]]; then
     bg="${yellowbg}"
 elif [[ $host =~ pro-ghill ]]; then
     bg="${white}"
@@ -101,6 +102,8 @@ elif [[ $host =~ roster|projects ]]; then
     bg="${greenbg}"
 elif [[ $host =~ zugzug ]]; then
     bg="${bluebg}"
+elif [[ $host =~ 0.bluehost ]]; then
+    bg="${orangebg}"
 elif [[ $host =~ fastdomain.com|unifiedlayer.com|bluehost.com|gnhill.net|box984|jarth.org ]]; then
     bg="${redbg}"
 else
