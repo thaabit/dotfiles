@@ -95,7 +95,6 @@ elif [[ $host =~ pro-ghill ]]; then
     bg="${white}"
 elif [[ $host =~ alpha|dev ]]; then
     bg="${green}"
-    screenbg="\005{g}"
 elif [[ $host =~ roster|projects ]]; then
     bg="${greenbg}"
 elif [[ $host =~ zugzug ]]; then
