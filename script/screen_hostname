@@ -1,11 +1,12 @@
 #!/bin/bash
+#!/bin/bash
 Red="\005{Wr}"
 Yellow="\005{Yy}"
 Green="\005{Gk}"
 Roster="\005{Gg}"
-Blue="\005{Bk}"
-Magenta="\005{Mk}"
-Cyan="\005{Ck}"
+Blue="\005{Wb}"
+Magenta="\005{Wm}"
+Cyan="\005{Wc}"
 White="\005{Wk}"
 
 shorthost=$(hostname)
