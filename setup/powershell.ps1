@@ -33,7 +33,7 @@ echo "symlinking $vimrc"
 cmd.exe /c mklink $vimrc "$dotfiles\dotfiles\vimrc"
 
 echo "symlinking bundles.vim"
-cmd.exe /c mklink $bundles_vim "$dotfiles\dotfiles\vim\bundles.vim"
+cmd.exe /c mklink $bundles_vim "$dotfiles\dotfiles\bundles.vim"
 
 echo "symlinking vimfiles"
 cmd.exe /c mklink /D "$HOME\vimfiles" "$HOME\.vim"

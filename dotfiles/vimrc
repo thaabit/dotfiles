@@ -1,3 +1,4 @@
+source ~/.bundles.vim
 if has('unix')
     set t_Co=256
 endif

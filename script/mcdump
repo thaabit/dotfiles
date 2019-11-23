@@ -1,0 +1,170 @@
+#!/usr/bin/perl
+=head1 NAME
+
+mcdump - memcached dump tool
+
+=head1 SYNOPSIS
+
+  mcdump [options] [key/search]
+
+  Options:
+   --help            brief help message
+   -h=%s, --host=%s  hostname for memcached (defaults to localhost)
+   -p=%s, --port=%s  port number for memcached (defaults to 11211)
+   -d, --delete      delete any keys found in the search
+   -v, --verbose     print out verbose version of keys in search
+
+
+=cut
+
+use strict;
+use warnings;
+use Getopt::Long;
+use IO::Prompt;
+use Pod::Usage;
+use Data::Dumper;
+use PrettyTable;
+use Cache::Memcached;
+use Net::Telnet;
+use Term::ANSIColor qw(:constants);
+use Debug;
+use Time;
+
+my $RESET    = RESET;
+
+my $SEARCH_HL  = WHITE.BOLD;
+
+local $SIG{__DIE__} = sub {
+    require Carp;
+    Carp::confess(@_);
+};
+my ($host,$port,$help,$delete,$verbose);
+GetOptions(
+    "h|host=s"  => \$host,
+    "p|port=s"  => \$port,
+    "d|delete"  => \$delete,
+    "help"      => \$help,
+    "v|verbose" => \$verbose,
+);
+$host ||= 'localhost';
+$port ||= '11211';
+
+pod2usage(1) if $help;
+my $mc = Cache::Memcached->new({ servers => [ "$host:$port" ] });
+my $search = shift @ARGV or die 'need to pass a search/key';
+find($search);
+
+exit;
+
+
+sub all_keys {
+    my $memcached = $mc;
+
+    my $telnet = Net::Telnet->new(
+        Host    => $host,
+        Port    => $port,
+        Timeout => 3,
+        Prompt  => '/END/',
+        Errmode => 'return',
+    );
+    $telnet->open;
+
+    # Get server stats
+    my @stats = $telnet->cmd('stats');
+    my ($uptime, $time);
+    foreach my $stat (@stats) {
+        if ($stat =~ /STAT uptime (\d+)$/) {
+            $uptime = $1;
+        }
+        elsif ($stat =~ /STAT time (\d+)$/) {
+            $time = $1;
+        }
+    }
+
+    # Set max buffer to 2 times default (1048576)
+    $telnet->max_buffer_length(2097152);
+
+    # Get all of the ids
+    my @output = $telnet->cmd('stats items');
+
+    # Split out each item id and its corresponding items id
+    my @ids = map { /STAT items:(\d+):number (\d+)/ ? [$1 => $2] : () } @output;
+
+    my $results = [];
+
+    # Loop over each each
+    for my $item (@ids) {
+        my ($id, $items) = @$item;
+
+        my @item_output = $telnet->cmd("stats cachedump $id $items");
+
+        my @item_keys = map {
+            /^ITEM (.+?) \[(\d+) b; (\d+) s\]$/ ? { cache_key => $1, bytes => $2, expires_time => $3 } : ()
+        } @item_output;
+
+        my $diff = $time - $uptime;
+        foreach my $item (@item_keys) {
+            my $expires = $item->{'expires_time'};
+            $item->{'expires_time'} = $expires == $diff ? 'NEVER' : Time->time($expires)->datetime_mysql;
+        }
+        push (@$results, { id => $id, values => \@item_keys });
+    }
+
+    return $results;
+}
+
+###----------------------------------------------------------------###
+
+sub delete {
+    my $key = shift or die 'need a key';
+
+    eval { $mc->delete($key) } or do {
+        die "Unable to delete key $key: $@";
+    }
+}
+
+sub find {
+    my $regex = shift;
+    my $matches = [];
+    for my $key (@{ &all_keys }) {
+        push @$matches, grep { $_->{'cache_key'} =~ /$regex/ } @{$key->{'values'}};
+    }
+
+    # nothing found
+    if (@$matches == 0) {
+        warn "no matches found for: $regex";
+    }
+
+    # delete
+    elsif ($delete) {
+        
+        my $key_list = join ', ', map { '[' . $_->{'cache_key'} . ']' } @$matches;
+        my $count = scalar @$matches;
+        if (confirm("Are you sure you want to delete these $count keys: $key_list (y/[n])?")) {
+            print "deleted";
+        }
+    }
+
+    # show
+    else {
+        if (@$matches == 1 || $verbose) {
+            foreach my $row (@$matches) {
+                my $key = $row->{'cache_key'};
+                my $value = $mc->get($key);
+                print pretty_table($value, { title => $key });
+            }
+        }
+        else {
+            my $output = pretty_table(sort $matches);
+            $output =~ s/($regex)/$SEARCH_HL$1$RESET/g;
+            print $output;
+        }
+    }
+}
+
+sub confirm {
+    my $prompt = shift;
+    return prompt "$prompt ",  -ty1
+}
+
+1;
