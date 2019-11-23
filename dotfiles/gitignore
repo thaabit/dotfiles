@@ -5,3 +5,6 @@ cover_db
 .ignore
 conf/*.bak
 conf/*.old
+nytprof.out
+nytprof
+githelper
