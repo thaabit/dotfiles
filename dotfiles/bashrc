@@ -2,7 +2,7 @@
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+. /etc/bashrc
 fi
 
 if [ -n "$STY" ]; then
@@ -91,7 +91,7 @@ spacer="${orange}>"
 host=$(hostname)
 if [[ $host =~ beta|smoker ]]; then
     bg="${yellowbg}"
-elif [[ $host =~ pro-ghill|jarth ]]; then
+elif [[ $host =~ pro-ghill|jarth|LPF4AGWRY ]]; then
     bg="${white}"
 elif [[ $host =~ alpha|dev ]]; then
     bg="${green}"
@@ -122,6 +122,6 @@ export MYSQL_PS1="\\u@\\h:\\d> "
 
 # server specific unmanaged definitions
 if [ -f ~/.bash_extra ]; then
-	. ~/.bash_extra
+. ~/.bash_extra
 fi
 
