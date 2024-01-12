@@ -25,6 +25,7 @@ alias s='source ~/.bashrc'
 alias clean='find . -name .#* | xargs rm -f && find . -name *.swp | xargs rm -f'
 alias vv="du --max-depth=1 -k | sort -nr | cut -f2 | xargs -d '\n' du -sh"
 alias gitlog="git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white). %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative"
+alias curl='curl -s'
 
 export CVSEDITOR='vim'
 export EDITOR="vim"
@@ -91,24 +92,16 @@ spacer="${orange}>"
 host=$(hostname)
 if [[ $host =~ beta|smoker ]]; then
     bg="${yellowbg}"
-elif [[ $host =~ pro-ghill|jarth ]]; then
+elif [[ $host =~ jarth ]]; then
     bg="${white}"
 elif [[ $host =~ alpha|dev ]]; then
     bg="${green}"
-elif [[ $host =~ roster|projects ]]; then
-    bg="${greenbg}"
-elif [[ $host =~ zugzug ]]; then
-    bg="${bluebg}"
-elif [[ $host =~ 0.bluehost ]]; then
-    bg="${orangebg}"
-elif [[ $host =~ fastdomain.com|unifiedlayer.com|bluehost.com|gnhill.net|box984|jarth.org ]]; then
+elif [[ $host =~ jarth.org ]]; then
     bg="${redbg}"
 else
     bg="${redbg}UNKNOWN!!!";
 fi
 host=${host#main\.}
-host=${host%.bluehost.com}
-host=${host%.unifiedlayer.com}
 userprompt="${bg}[${host}]${reset}"
 
 if git --version &>/dev/null; then
@@ -120,8 +113,8 @@ fi
 export MYSQL_PS1="\\u@\\h:\\d> "
 #export MYSQL_PS1=$(echo -e "\x1B[1;37;43m\\u@\\h:\\d>\x1B[0m ")
 
+
 # server specific unmanaged definitions
 if [ -f ~/.bash_extra ]; then
 	. ~/.bash_extra
 fi
-
