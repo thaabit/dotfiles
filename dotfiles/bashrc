@@ -2,7 +2,7 @@
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+. /etc/bashrc
 fi
 
 if [ -n "$STY" ]; then
@@ -116,5 +116,5 @@ export MYSQL_PS1="\\u@\\h:\\d> "
 
 # server specific unmanaged definitions
 if [ -f ~/.bash_extra ]; then
-	. ~/.bash_extra
+. ~/.bash_extra
 fi
