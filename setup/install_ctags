@@ -36,17 +36,17 @@ else {
         &done;
 
         &inform("cloning from github...");
-        `git clone https://github.com/universal-ctags/ctags.git`
+        print `git clone https://github.com/universal-ctags/ctags.git`;
         &done;
 
         chdir "ctags" or die $!;
         &inform("configuring source...");
-        `./autogen.sh >> $logfile 2>&1`;
-        `./configure >> $logfile 2>&1`;
+        print `./autogen.sh >> $logfile 2>&1`;
+        print `./configure >> $logfile 2>&1`;
         &done;
 
         &inform("installing...");
-        `make && sudo make install >> $logfile 2>&1`;
+        print `make && sudo make install >> $logfile 2>&1`;
         &done;
 
         &inform("cleaning up...");

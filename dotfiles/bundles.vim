@@ -24,6 +24,7 @@ Plugin 'vim-scripts/taglist.vim'
 Plugin 'vim-scripts/vcscommand.vim'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'vim-scripts/moria'
+Plugin 'keith/swift.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
