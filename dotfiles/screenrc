@@ -34,8 +34,8 @@ hardstatus string '%48`%{= kw }[%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%
 #hardstatus string '%{= Kd} %{= Kd}%-w%{= Kr}[%{= KW}%n %t%{= Kr}]%{= Kd}%+w %-= %{KG} %H%{KW}|%{KY}%101`%{KW}|%D %M %d %Y%{= Kc} %C%A%{-}'
 
 # initial windows
-screen -t test  2 bash
-screen -t mysql 3 bash
-screen -t log   4 bash
-screen -t grep  5 bash
-screen -t vim   1 bash
+screen -t vuejs  2 zsh
+screen -t mysql  3 zsh
+screen -t docker 4 zsh
+screen -t vite   5 zsh
+screen -t python 1 zsh

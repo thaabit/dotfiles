@@ -6,7 +6,7 @@
 
 ########## Variables
 
-dotfiles="bashrc vimrc bundles.vim screenrc gitignore"    # list of files/folders to symlink in homedir
+dotfiles="zshrc bashrc vimrc bundles.vim screenrc gitignore"    # list of files/folders to symlink in homedir
 vimfiles=$HOME/.vim
 bins="zcp fixsshauth compile mysql_dump_remote_db mysql_user_add"            # list of files to put in ~/bin
 

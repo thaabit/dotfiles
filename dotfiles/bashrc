@@ -96,10 +96,10 @@ elif [[ $host =~ jarth|sirius ]]; then
     bg="${white}"
 elif [[ $host =~ alpha|dev ]]; then
     bg="${green}"
-elif [[ $host =~ jarth.org ]]; then
+elif [[ $host =~ jarth.org|sirius ]]; then
     bg="${redbg}"
 else
-    bg="${redbg}UNKNOWN!!!";
+    bg="${redbg}!UNKNOWN";
 fi
 host=${host#main\.}
 userprompt="${bg}[${host}]${reset}"
@@ -118,3 +118,5 @@ export MYSQL_PS1="\\u@\\h:\\d> "
 if [ -f ~/.bash_extra ]; then
 . ~/.bash_extra
 fi
+
+. "$HOME/.local/bin/env"

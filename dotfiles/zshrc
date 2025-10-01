@@ -1,0 +1,99 @@
+orange='%F{#ffa500}'
+blue='%F{#6fa8dc}'
+
+function parse_git_branch() {
+  branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  if [[ -n "$branch" ]]; then
+    echo "[⎇ ${branch}]"
+  fi
+}
+setopt prompt_subst
+PROMPT='%B[%M]$blue%~%f $orange$(parse_git_branch)%f$ '
+
+setopt histignorealldups sharehistory
+
+# Use emacs keybindings even if our EDITOR is set to vi
+bindkey -e
+
+# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+
+# Use modern completion system
+autoload -Uz compinit
+compinit
+
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _expand _complete _correct _approximate
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu select=2
+eval "$(dircolors -b)"
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+zstyle ':completion:*' menu select=long
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
+
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
+
+alias ll='ls -lh'
+alias elog='sudo tail -f /etc/httpd/logs/error_log'
+alias sr='screen -d -R'
+alias mc='sudo /etc/init.d/memcached restart'
+alias mv='mv -i'
+alias rm='rm -i'
+alias cp='cp -i'
+alias s='source ~/.zshrc; echo "sourced ~/.zshrc"'
+alias clean='find . -name .#* | xargs rm -f && find . -name *.swp | xargs rm -f'
+alias vv="du --max-depth=1 -k | sort -nr | cut -f2 | xargs -d '\n' du -sh"
+alias gitlog="git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white). %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative"
+alias curl='curl -s'
+
+export CVSEDITOR='vim'
+export EDITOR="vim"
+export VISUAL="vim"
+alias vi='vim'
+setopt REMATCH_PCRE
+
+function hr {
+    local cmd=''
+    if [ -e "/bin/systemctl" ]
+    then
+        cmd='sudo /bin/systemctl reload httpd.service; sudo systemctl status httpd.service'
+    else
+        cmd='sudo service httpd graceful'
+    fi
+    echo "$cmd"
+    eval $cmd
+}
+
+
+
+bg=$reset
+dirprompt="${blue}\w"
+spacer="${orange}>"
+
+host=$(hostname)
+if [[ $host =~ (beta|smoker) ]]; then
+    bg="${yellowbg}"
+elif [[ $host =~ (jarth|sirius) ]]; then
+    bg="${white}"
+elif [[ $host =~ (alpha|dev) ]]; then
+    bg="${green}"
+elif [[ $host =~ jarth.org ]]; then
+    bg="${redbg}"
+else
+    bg="${redbg}";
+fi
+host=${host#main\.}
+userprompt="${bg}[${host}]${reset}"
+
+export MYSQL_PS1="\\u@\\h:\\d> "
+
+. "$HOME/.local/bin/env"
