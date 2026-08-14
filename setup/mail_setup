@@ -1,22 +1,44 @@
-#!/usr/bin/bash
+#!/usr/bin/perl
+use lib '.';
+use CMDLine qw(runcmd readprompt install_package package_installed);
+if (!package_installed('postfix')) {
+    inform("You need to install postfix manually using 'sudo apt install postfix'");
+    exit;
+}
+my @pkgs = (
+    'dovecot-core',
+    'dovecot-imapd',
+    'dovecot-lmtpd',
+    'dovecot-mysql',
+    'dovecot-pop3d',
+    'mariadb-server',
+    'postfix-mysql',
+);
+for my $pkg (@pkgs) {
+    install_package($pkg) unless package_installed($pkg);
+}
 
-sudo yum --enablerepo=centosplus install postfix
-sudo yum install dovecot dovecot-mysql
+runcmd("sudo systemctl enable mariadb.service");
+runcmd("sudo systemctl start mariadb.service");
+my $mysql_user = readprompt("Enter the MYSQL user");
+my $mysql_pass = readprompt("Enter the MYSQL password");
 
-sudo systemctl enable mariadb.service
-sudo systemctl start mariadb.service
+runcmd(qq{echo "CREATE DATABASE IF NOT EXISTS mail" | sudo mysql});
+runcmd(qq{echo "GRANT SELECT ON mail.* TO '$mysql_user'\@'127.0.0.1' IDENTIFIED BY '$mysql_pass'" | sudo mysql});
+runcmd(qq{echo "FLUSH PRIVILEGES" | sudo mysql});
 
-read -p "Do you want to create a new mysql backend (y/[n])? " -n 1 -r
-echo 
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    sudo yum install mariadb-server dovecot-mysql
-    sudo systemctl enable mariadb.service
-    sudo systemctl start mariadb.service
-    read -p "Enter the mysql user" mysql_user
-    read -p "Enter the mysql password" mysql_pw
-    echo "CREATE DATABASE IF NOT EXISTS mail" | sudo mysql
-    echo "GRANT SELECT, INSERT, UPDATE, DELETE ON mail.* TO '$mysql_user'@'localhost' IDENTIFIED BY '$mysql_pw'";
-    echo "GRANT SELECT, INSERT, UPDATE, DELETE ON mail.* TO '$mysql_user'@'localhost.localdomain' IDENTIFIED BY '$mysql_pw'";
-    echo "FLUSH PRIVILEGES" | sudo mysql;
-    mysql_secure_installation
-fi
+create_and_write('/etc/pam.d/smtp', qq{
+auth required pam_mysql.so user=$mysql_user passwd=$mysql_pass host=127.0.0.1 db=mail table=user usercolumn=email passwdcolumn=password crypt=1
+account sufficient pam_mysql.so user=$mysql_user passwd=$mysql_pass host=127.0.0.1 db=mail table=user usercolumn=email passwdcolumn=password crypt=1
+});
+
+create_and_write('/etc/postfix/sasl/smtpd.conf', qq{
+pwcheck_method: saslauthd
+mech_list: plain login
+});
+
+# https://serverfault.com/questions/1159702/saslauthd-service-not-starting-after-upgrade-to-ubuntu-24-04
+create_and_write('/etc/systemd/system/saslauthd.service.d/override.conf', qq{
+[Service]
+PIDFile=/var/spool/postfix/var/run/saslauthd/saslauthd.pid
+});

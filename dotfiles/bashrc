@@ -96,7 +96,7 @@ elif [[ $host =~ jarth|sirius ]]; then
     bg="${white}"
 elif [[ $host =~ alpha|dev ]]; then
     bg="${green}"
-elif [[ $host =~ jarth.org|sirius ]]; then
+elif [[ $host =~ thaabit.net|jarth.org|sirius ]]; then
     bg="${redbg}"
 else
     bg="${redbg}!UNKNOWN";

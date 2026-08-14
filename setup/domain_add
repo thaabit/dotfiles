@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+use lib '.';
+use CMDLine qw(runcmd readprompt install_package package_installed);
+use Data::Debug;
+
+use Net::Address::IP::Local;
+my $ip = Net::Address::IP::Local->public;
+debug $ip;
+
+my @pkgs = qw(
+    certbot
+    python3-certbot-apache
+);
+for my $pkg (@pkgs) {
+    install_package($pkg) unless package_installed($pkg);
+}
+
+my $domain = '';
+#runcmd("sudo certbot --apache -d $domain");

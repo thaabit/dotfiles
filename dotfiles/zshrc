@@ -65,7 +65,7 @@ function hr {
     local cmd=''
     if [ -e "/bin/systemctl" ]
     then
-        cmd='sudo /bin/systemctl reload httpd.service; sudo systemctl status httpd.service'
+        cmd='sudo service apache2 reload'
     else
         cmd='sudo service httpd graceful'
     fi
@@ -86,7 +86,7 @@ elif [[ $host =~ (jarth|sirius) ]]; then
     bg="${white}"
 elif [[ $host =~ (alpha|dev) ]]; then
     bg="${green}"
-elif [[ $host =~ jarth.org ]]; then
+elif [[ $host =~ (thaabit.net|jarth.org) ]]; then
     bg="${redbg}"
 else
     bg="${redbg}";
@@ -96,4 +96,4 @@ userprompt="${bg}[${host}]${reset}"
 
 export MYSQL_PS1="\\u@\\h:\\d> "
 
-. "$HOME/.local/bin/env"
+#. "$HOME/.local/bin/env"

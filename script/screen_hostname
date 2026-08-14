@@ -18,7 +18,7 @@ elif [[ $HOSTNAME =~ pro-ghill|sirius ]]; then
     echo -e "$White[$shorthost]"
 elif [[ $HOSTNAME =~ alpha|dev ]]; then
     echo -e "$Green[$shorthost]"
-elif [[ $HOSTNAME =~ jarth.org ]]; then
+elif [[ $HOSTNAME =~ thaabit.net|jarth.org ]]; then
     echo -e "$Red[$shorthost]"
 else
     echo -e "$Red[$shorthost UNKNOWN!!!]"
