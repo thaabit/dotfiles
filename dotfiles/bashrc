@@ -52,7 +52,7 @@ function cur_branch () {
 
 function _git_branch {
     local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-    if [ $branch ]; then 
+    if [ $branch ]; then
         printf " [%s]" $branch;
     fi
 }
@@ -106,7 +106,7 @@ userprompt="${bg}[${host}]${reset}"
 
 if git --version &>/dev/null; then
     export PS1="${userprompt}${dirprompt}${orange}\$(_git_branch)${purple}\$(_git_desc)${reset} \$ "
-else 
+else
     #export PS1="\[\e[1;37;41m\][\\u@\\h \\W]\[\e[m\]\\$ "
     export PS1="${userprompt}${dirprompt}${reset} \$ "
 fi

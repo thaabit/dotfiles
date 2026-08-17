@@ -1,13 +1,15 @@
 #!/usr/bin/perl
-use parent 'Exporter';
 use warnings;
 use strict;
-use Data::Debug qw(debug);
+use parent 'Exporter';
 
+use Data::Debug qw(debug);
 use Term::ANSIColor qw(:constants);
+use File::Path qw(make_path);
+use File::Copy;
 
 # Exported by default
-our @EXPORT_OK = qw(runcmd readprompt inform done install_package package_installed binary_installed);
+our @EXPORT_OK = qw(runcmd readprompt inform done install_package package_installed binary_installed create_and_write);
 
 my $RESET = RESET;
 my $COLOR_SUCCESS = GREEN.BOLD;
@@ -18,7 +20,7 @@ my $COLOR_PROMPT  = BLUE.BOLD;
 sub runcmd {
     my $cmd = shift;
     print "${COLOR_PROMPT}$cmd${RESET}\n";
-    print `$cmd`;
+    system($cmd) == 0 or die "Failed to run $cmd: $?";
     print "\n";
 }
 
@@ -61,5 +63,25 @@ sub readprompt {
     chomp $resp;
     return $resp;
 }
+
+sub create_and_write {
+    my $path = shift;
+    my $contents = shift;
+    die "need to run as sudo" unless &is_sudo;
+    my $folder = $path =~ s{/[^/]+$}{}r;
+    make_path($folder, { verbose => 1, mode => 0755 });
+    copy($path, "$path.old") or die "cannot copy $path: $!" if -e $path;
+    open(my $fh, '>', $path);
+    $contents = &trim($contents);
+    print $fh $contents;
+    close $fh;
+}
+
+sub trim {
+    my $string = shift;
+    return $string =~ s/^\s+|\s+$//gr;
+}
+
+sub is_sudo { return $> == 0 }
 
 1;

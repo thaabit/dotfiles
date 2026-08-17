@@ -1,5 +1,9 @@
 orange='%F{#ffa500}'
-blue='%F{#6fa8dc}'
+alert='%K{#FF0000}%F{white}'
+safe='%K{#6fa8dc}%F{white}'
+
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 function parse_git_branch() {
   branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
@@ -7,8 +11,26 @@ function parse_git_branch() {
     echo "[⎇ ${branch}]"
   fi
 }
+function parse_user() {
+    usr=''
+    if [[ $EUID -eq 0 ]]; then
+        usr='${alert}<ROOT>%f'
+    fi
+    echo $usr
+}
+
+host=$(hostname)
+bg='%f'
+if [[ $host =~ (beta|smoker) ]]; then
+    bg="${yellowbg}"
+elif [[ $host =~ (alpha|dev) ]]; then
+    bg="${safe}"
+else
+    bg="${alert}"
+fi
+
 setopt prompt_subst
-PROMPT='%B[%M]$blue%~%f $orange$(parse_git_branch)%f$ '
+PROMPT='$(parse_user)%B${bg}[%M]$blue%~%f%k $orange$(parse_git_branch)%f$ '
 
 setopt histignorealldups sharehistory
 
@@ -75,25 +97,14 @@ function hr {
 
 
 
-bg=$reset
 dirprompt="${blue}\w"
 spacer="${orange}>"
 
-host=$(hostname)
-if [[ $host =~ (beta|smoker) ]]; then
-    bg="${yellowbg}"
-elif [[ $host =~ (jarth|sirius) ]]; then
-    bg="${white}"
-elif [[ $host =~ (alpha|dev) ]]; then
-    bg="${green}"
-elif [[ $host =~ (thaabit.net|jarth.org) ]]; then
-    bg="${redbg}"
-else
-    bg="${redbg}";
-fi
+
 host=${host#main\.}
-userprompt="${bg}[${host}]${reset}"
+userprompt="${usr}${bg}[${host}]${reset}"
 
 export MYSQL_PS1="\\u@\\h:\\d> "
 
 #. "$HOME/.local/bin/env"
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)

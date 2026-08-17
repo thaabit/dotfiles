@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if ! command -v make &> /dev/null; then
+    echo "installing make"
+    sudo apt-get install make
+fi
+
+if ! command -v cpanm &> /dev/null; then
+    echo "installing cpanm"
+    curl -L https://cpanmin.us | perl - --sudo App::cpanminus
+fi
+
+sudo cpanm \
+    Data::Debug
