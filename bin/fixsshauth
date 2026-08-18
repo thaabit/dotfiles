@@ -39,6 +39,7 @@ my @socks = grep { !-l $_ } (
     glob ("/tmp/ssh-*/agent*"),
     glob("/tmp/launch*/Listeners"),
     glob("/tmp/keyring-*/ssh"),
+    glob("~/.ssh/agent"),
 );
 
 if (!@socks) {
